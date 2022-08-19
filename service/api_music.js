@@ -11,3 +11,11 @@ export function getRankings(id) {
     id
   })
 }
+
+export function getSongMenu(cat = "全部", limit = 6, offset = 0) {
+  return xxRequest.get("/top/playlist", {
+    cat,
+    limit,
+    offset
+  })
+}

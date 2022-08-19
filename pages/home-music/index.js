@@ -1,6 +1,6 @@
 // pages/home-music/index.js
 import { rankingStore } from "../../store/index";
-import { getBanners } from "../../service/api_music"
+import { getBanners, getSongMenu } from "../../service/api_music"
 import queryRect from '../../utils/query-rect'
 import throttle from '../../utils/throttle'
 
@@ -10,7 +10,11 @@ Page({
   data: {
     banners: [],
     swiperHeight: 0,
-    recommendSongs: []
+    recommendSongs: [],
+    hotSongMenu: [],
+    recommendSongsMenu: [],
+    // rankings: [],
+    rankings: { 0: {}, 2: {}, 3: {} }
   },
 
   onLoad: function (options) {
@@ -23,6 +27,9 @@ Page({
       const recommendSongs = res.tracks.slice(0, 6)
       this.setData({ recommendSongs })
     })
+    rankingStore.onState("newRanking", this.getRankingHandler(0))
+    rankingStore.onState("originRanking", this.getRankingHandler(2))
+    rankingStore.onState("upRanking", this.getRankingHandler(3))
   },
   // 网络请求
   getPageData: function () {
@@ -30,6 +37,12 @@ Page({
       // setData设置data数据上是同步的
       // 通过最新的数据对wxml进行渲染，渲染过程是异步的
       this.setData({ banners: res.banners })
+    })
+    getSongMenu().then(res => {
+      this.setData({ hotSongMenu: res.playlists })
+    })
+    getSongMenu("华语").then(res => {
+      this.setData({ recommendSongsMenu: res.playlists })
     })
   },
   // 事件处理
@@ -46,8 +59,21 @@ Page({
       this.setData({ swiperHeight: rect.height })
     })
   },
-  onUnload: function () {
 
+  getRankingHandler: function (idx) {
+    return (res) => {
+      if (Object.keys(res).length === 0) return
+      const name = res.name
+      const coverImgUrl = res.coverImgUrl
+      const playCount = res.playCount
+      const songList = res.tracks.slice(0, 3)
+      const rankingObj = { name, coverImgUrl, songList, playCount }
+      // const originRankings = [...this.data.rankings]
+      // originRankings.push(rankingObj)
+      const newRankings = { ...this.data.rankings, [idx]: rankingObj }
+      this.setData({
+        rankings: newRankings
+      })
+    }
   }
-
 })

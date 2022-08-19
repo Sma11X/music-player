@@ -1,20 +1,16 @@
-// components/area-header/index.js
+// components/song-menu-area/index.js
 Component({
   /**
    * 组件的属性列表
    */
   properties: {
+    songMenu: {
+      type: Array,
+      value: []
+    },
     title: {
       type: String,
-      value: "Header"
-    },
-    rightText: {
-      type: String,
-      value: "更多"
-    },
-    showRight: {
-      type: Boolean,
-      value: true
+      value: "默认歌单"
     }
   },
 
