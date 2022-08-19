@@ -1,2 +1,12 @@
 <!--pages/detail-video/index.wxml-->
-<text>pages/detail-video/index.wxml</text>
+<video class="video" src="{{mvURLInfo.url}}" autoplay loop></video>
+
+<wxs src="../../utils/format.wxs" module="format"></wxs>
+<view class="info">
+  <view class="title">{{ mvDetail.name }}</view>
+  <view class="desc">{{ mvDetail.artistName }} - {{ mvDetail.alias[0] }}</view>
+  <view class="other">
+    <text class="play-count">{{format.formatCount(mvDetail.playCount)}}次播放 - </text>
+    <text class="publish-time">{{mvDetail.publishTime}}</text>
+  </view>
+</view>

@@ -1,0 +1,23 @@
+{
+  "name": "xxmusic",
+  "version": "1.0.0",
+  "description": "",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sma11X/music-player.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sma11X/music-player/issues"
+  },
+  "homepage": "https://github.com/Sma11X/music-player#readme",
+  "dependencies": {
+    "@vant/weapp": "^1.10.4"
+  }
+}
