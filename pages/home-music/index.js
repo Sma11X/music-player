@@ -5,6 +5,12 @@ import queryRect from '../../utils/query-rect'
 import throttle from '../../utils/throttle'
 
 const throttleQueryRect = throttle(queryRect)
+const rankingMap = {
+  0: "newRanking",
+  1: "hotRanking",
+  2: "originRanking",
+  3: "upRanking"
+}
 
 Page({
   data: {
@@ -57,6 +63,21 @@ Page({
     throttleQueryRect(".swiper-image").then(res => {
       const rect = res[0]
       this.setData({ swiperHeight: rect.height })
+    })
+  },
+
+  handleMoreClick: function () {
+    this.navigateToDetailSongsPage("hotRanking")
+  },
+
+  handelRankingItemClick: function (event) {
+    const idx = event.currentTarget.dataset.idx
+    this.navigateToDetailSongsPage(rankingMap[idx])
+  },
+
+  navigateToDetailSongsPage: function (rankingName) {
+    wx.navigateTo({
+      url: `/pages/detail-songs/index?ranking=${rankingName}&type=rank`,
     })
   },
 
