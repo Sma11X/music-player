@@ -14,6 +14,8 @@ Component({
     navBarHeight: getApp().globalData.navBarHeight
   },
   methods: {
-
+    handleLeftClick: function () {
+      this.triggerEvent('click')
+    }
   }
 })

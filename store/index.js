@@ -1,6 +1,10 @@
 import { rankingStore } from './ranking-store'
-import { audioContext } from './player-store'
+import { audioContext, playerStore } from './player-store'
 export {
   rankingStore,
-  audioContext
+  audioContext,
+  playerStore
 }
+
+// export * from './player-store'
+// export * from './ranking-store'
