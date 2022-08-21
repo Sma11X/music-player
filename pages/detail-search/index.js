@@ -26,14 +26,14 @@ Page({
     const searchValue = event.detail
     this.setData({ searchValue })
     if (!searchValue.length) {
-      this.setData({ suggestSongs: [] })
-      this.setData({ resultSongs: [] })
+      this.setData({ suggestSongs: [], resultSongs: [] })
+      debounceGetSearchSuggest.cancel()
       return
     }
     debounceGetSearchSuggest(searchValue).then(res => {
       const suggestSongs = res.result.allMatch
       this.setData({ suggestSongs: suggestSongs })
-
+      if (!suggestSongs) return
       // 转成node节点
       const suggestKeywords = suggestSongs.map(item => item.keyword)
       const suggestSongsNodes = []
