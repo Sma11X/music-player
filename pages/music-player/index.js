@@ -54,7 +54,7 @@ Page({
     // 计算需要播放的currentTime
     const currentTime = this.data.durationTime * value / 100
     // 设置context播放currentTime位置
-    audioContext.pause()
+    // audioContext.pause()
     audioContext.seek(currentTime / 1000)
     // 记录最新的sliderValue
     this.setData({ sliderValue: value, isSliderChanging: false })

@@ -83,8 +83,15 @@ Page({
     playerStore.setState("playListIndex", index)
   },
 
-  handlePlayBtnClick: function () {
+  handlePlayBtnClick: function (event) {
     playerStore.dispatch("changeMusicPlayStatusAction", !this.data.isPlaying)
+    // event.stopPropagation()
+  },
+
+  handlePlayBarClick: function () {
+    wx.navigateTo({
+      url: '/pages/music-player/index?id=' + this.data.currentSong.id,
+    })
   },
 
   setupPlayerStoreListener: function () {
