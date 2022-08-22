@@ -1,10 +1,10 @@
 // pages/home-music/index.js
-import { rankingStore } from "../../store/index";
+import { playerStore, rankingStore } from "../../store/index";
 import { getBanners, getSongMenu } from "../../service/api_music"
 import queryRect from '../../utils/query-rect'
 import throttle from '../../utils/throttle'
 
-const throttleQueryRect = throttle(queryRect)
+const throttleQueryRect = throttle(queryRect, 1000, { trailing: true })
 const rankingMap = {
   0: "newRanking",
   1: "hotRanking",
@@ -20,7 +20,10 @@ Page({
     hotSongMenu: [],
     recommendSongsMenu: [],
     // rankings: [],
-    rankings: { 0: {}, 2: {}, 3: {} }
+    rankings: { 0: {}, 2: {}, 3: {} },
+
+    currentSong: {},
+    isPlaying: false
   },
 
   onLoad: function (options) {
@@ -28,14 +31,7 @@ Page({
     // 共享数据的请求
     rankingStore.dispatch("getRankingDataAction")
     // 从store获取共享的数
-    rankingStore.onState("hotRanking", (res) => {
-      if (!res.tracks) return
-      const recommendSongs = res.tracks.slice(0, 6)
-      this.setData({ recommendSongs })
-    })
-    rankingStore.onState("newRanking", this.getRankingHandler(0))
-    rankingStore.onState("originRanking", this.getRankingHandler(2))
-    rankingStore.onState("upRanking", this.getRankingHandler(3))
+    this.setupPlayerStoreListener()
   },
   // 网络请求
   getPageData: function () {
@@ -78,6 +74,32 @@ Page({
   navigateToDetailSongsPage: function (rankingName) {
     wx.navigateTo({
       url: `/pages/detail-songs/index?ranking=${rankingName}&type=rank`,
+    })
+  },
+
+  handleSongItemClick: function (event) {
+    const index = event.currentTarget.dataset.index
+    playerStore.setState("playListSongs", this.data.recommendSongs)
+    playerStore.setState("playListIndex", index)
+  },
+
+  handlePlayBtnClick: function () {
+    playerStore.dispatch("changeMusicPlayStatusAction", !this.data.isPlaying)
+  },
+
+  setupPlayerStoreListener: function () {
+    rankingStore.onState("hotRanking", (res) => {
+      if (!res.tracks) return
+      const recommendSongs = res.tracks.slice(0, 6)
+      this.setData({ recommendSongs })
+    })
+    rankingStore.onState("newRanking", this.getRankingHandler(0))
+    rankingStore.onState("originRanking", this.getRankingHandler(2))
+    rankingStore.onState("upRanking", this.getRankingHandler(3))
+
+    playerStore.onStates(["currentSong", "isPlaying"], ({ currentSong, isPlaying }) => {
+      if (currentSong) this.setData({ currentSong })
+      if (isPlaying !== undefined) this.setData({ isPlaying })
     })
   },
 

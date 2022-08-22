@@ -74,7 +74,13 @@ Page({
     playerStore.setState("playModeIndex", playModeIndex)
   },
   handlePlayBtnClick: function () {
-    playerStore.dispatch("changeMusicPlayStatusAction")
+    playerStore.dispatch("changeMusicPlayStatusAction", !this.data.isPlaying)
+  },
+  handlePrevBtnClick: function() {
+    playerStore.dispatch("changeNewMusicAction", false)
+  },
+  handleNextBtnClick: function() {
+    playerStore.dispatch("changeNewMusicAction")
   },
   setupPlayerStoreListener: function () {
     playerStore.onStates(["currentSong", "durationTime", "lyricInfos"], ({ currentSong, durationTime, lyricInfos }) => {

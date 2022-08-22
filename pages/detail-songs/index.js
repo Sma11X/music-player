@@ -1,5 +1,5 @@
 // pages/detail-songs/index.js
-import { rankingStore } from '../../store/index'
+import { playerStore, rankingStore } from '../../store/index'
 import { getRankings } from '../../service/api_music'
 Page({
   data: {
@@ -10,7 +10,7 @@ Page({
 
   onLoad(options) {
     const type = options.type
-    this.setData({type})
+    this.setData({ type })
     if (type === "menu") {
       const id = options.id
       getRankings(id).then(res => {
@@ -22,6 +22,12 @@ Page({
       // 获取数据
       rankingStore.onState(ranking, this.getRankingDataHandler)
     }
+  },
+
+  handleSongItemClick: function (event) {
+    const index = event.currentTarget.dataset.index
+    playerStore.setState("playListSongs", this.data.songInfo.tracks)
+    playerStore.setState("playListIndex", index)
   },
 
   onUnload() {
